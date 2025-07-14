@@ -11,5 +11,10 @@ setup(
     install_requires=[
         'pandas>=2.3.0',
         'requests>=2.32.0'
-    ]
+    ],
+    entry_points={
+        'console_scripts': [
+            'redcap_download=redcap_downloader:main.main',
+        ],
+    },
 )
