@@ -1,0 +1,4 @@
+study_id,redcap_event_name,consent_contact,empty_column
+abd001,event1,1,
+abd002,event2_arm_1,,
+abd003,event3_arm_1,,

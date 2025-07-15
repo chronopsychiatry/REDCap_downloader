@@ -1,6 +1,5 @@
 from os.path import join, exists, isdir, abspath
 from os import makedirs
-from datetime import datetime
 import logging
 
 
@@ -28,12 +27,11 @@ class PathResolver:
         self.set_main_dir(path)
 
     def set_main_dir(self, path):
-        main_dir = join(f"{path}_{datetime.today().strftime('%Y-%m-%d')}")
-        if not exists(main_dir):
-            makedirs(main_dir)
-        if not isdir(main_dir):
-            raise ValueError(f'Main storage: {main_dir} is not a directory')
-        self._main_dir = main_dir
+        if not exists(path):
+            makedirs(path)
+        if not isdir(path):
+            raise ValueError(f'Main storage: {path} is not a directory')
+        self._main_dir = path
         self._logger.info(f'Using storage dir: {abspath(self._main_dir)}')
 
     def get_main_dir(self):

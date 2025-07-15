@@ -34,14 +34,10 @@ class DataCleaner:
         """
         self._logger.info('Saving questionnaire variables...')
         variables = self.redcap.get_questionnaire_variables()
-        variables.save_raw_data(path=self.paths.get_raw_variables_file())
+        variables.save_raw_data(paths=self.paths)
 
         variables = self.clean_variables(variables)
-
-        variables.list = variables.split(by='form_name')
-        variables.list = [self.remove_empty_columns(df) for df in variables.list]
-
-        variables.save_cleaned_data(paths=self.paths)
+        variables.save_cleaned_data(paths=self.paths, by='form_name', remove_empty_columns=True)
 
     def save_questionnaire_reports(self):
         """
@@ -55,14 +51,10 @@ class DataCleaner:
         """
         self._logger.info('Saving questionnaire reports...')
         reports = self.redcap.get_questionnaire_report()
-        reports.save_raw_data(path=self.paths.get_raw_report_file())
+        reports.save_raw_data(paths=self.paths)
 
         reports = self.clean_reports(reports)
-
-        reports.list = reports.split(by=['study_id', 'redcap_event_name'])
-        reports.list = [self.remove_empty_columns(df) for df in reports.list]
-
-        reports.save_cleaned_data(self.paths)
+        reports.save_cleaned_data(self.paths, by=['study_id', 'redcap_event_name'], remove_empty_columns=True)
 
     def clean_variables(self, variables):
         """
@@ -75,12 +67,12 @@ class DataCleaner:
             Variables: Variables instance with cleaned data added.
         """
         cleaned_var = (variables
-                       .raw_data
+                       .data
                        .pipe(self.remove_html_tags)
                        .pipe(self.filter_variables_columns)
                        .pipe(self.clean_variables_form_names)
                        )
-        variables.cleaned_data = cleaned_var
+        variables.data = cleaned_var
         return variables
 
     def clean_reports(self, reports):
@@ -94,11 +86,11 @@ class DataCleaner:
             Report: Report instance with cleaned data added.
         """
         cleaned_reports = (reports
-                           .raw_data
+                           .data
                            .assign(redcap_event_name=lambda df:
                                    df.redcap_event_name.str.replace('_arm_1', ''))
                            )
-        reports.cleaned_data = cleaned_reports
+        reports.data = cleaned_reports
         return reports
 
     def clean_variables_form_names(self, df):
@@ -154,15 +146,3 @@ class DataCleaner:
             **df.select_dtypes(include=['object'])
             .replace(to_replace=r'<[^>]+>', value='', regex=True)
         )
-
-    def remove_empty_columns(self, df):
-        """
-        Remove columns that contain only NA values.
-
-        Args:
-            df (pd.DataFrame): DataFrame to be processed.
-
-        Returns:
-            pd.DataFrame: DataFrame with empty columns removed.
-        """
-        return df.dropna(axis='columns', how='all')

@@ -29,6 +29,7 @@ redcap_download
 
 The program will create the following folder structure:
 
+```markdown
 ├── download.log
 ├── meta
 │   ├── 12month_followup.csv
@@ -51,6 +52,7 @@ The program will create the following folder structure:
     │   └── ABD002_screening.csv
     ├── ABD003
     ...
+```
 
 - `download.log`: contains a log of the program run
 - `meta`: questionnaire metadata. Contains one .csv file per questionnaire. Each .csv file contains a list of all variables in the questionnaire (as found in the reports), along with a description
