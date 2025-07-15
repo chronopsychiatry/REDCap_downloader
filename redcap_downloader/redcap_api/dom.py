@@ -45,6 +45,10 @@ class Report(DataMixin):
         super().__init__()
         self.data = report_data
         self.raw_data = report_data
+        self._logger.info(f'Initialised report for {len(self.data.study_id.unique())} subjects.')
+        self._logger.info(f'Number of questionnaires: \
+                          {self.data.groupby("redcap_event_name").size().sort_values(ascending=False)}')
+        self._logger.debug(f'Subject list: {self.data.study_id.unique()}')
 
     def __str__(self):
         return f"Report with {self.data.shape[0]} entries and {self.data.shape[1]} columns"
@@ -102,6 +106,7 @@ class Variables(DataMixin):
         super().__init__()
         self.raw_data = variables_data
         self.data = variables_data
+        self._logger.info(f'Initialised list of {len(self.data)} variables.')
 
     def __str__(self):
         return f"Variables with {self.raw_data.shape[0]} entries"

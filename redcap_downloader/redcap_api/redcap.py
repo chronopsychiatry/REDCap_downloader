@@ -86,5 +86,5 @@ class REDCap:
         if r.status_code != 200:
             self._logger.error(f"Failed to fetch report: {r.text}")
             raise Exception(f"HTTP Error: {r.status_code}")
-        self._logger.info(f'Accessing report {self.report_id} through the REDCap API.')
+        self._logger.info(f'Fetched report {self.report_id} through the REDCap API.')
         return Report(pd.read_csv(StringIO(r.text)))

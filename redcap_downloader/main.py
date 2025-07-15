@@ -13,13 +13,16 @@ def main():
     properties = load_application_properties()
 
     # Configure the logger
+    log_file = os.path.join(properties.download_folder, "download.log")
     if not os.path.exists(properties.download_folder):
         os.makedirs(properties.download_folder)
+    if os.path.exists(log_file):
+        os.remove(log_file)
     logging.basicConfig(
         level=logging.DEBUG if properties.log_level == 'DEBUG' else logging.INFO,  # Set the log level
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Log format
         handlers=[
-            logging.FileHandler(os.path.join(properties.download_folder, "download.log")),  # Log to a file
+            logging.FileHandler(log_file),  # Log to a file
             logging.StreamHandler()  # Log to console
         ]
     )

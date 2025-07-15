@@ -32,12 +32,12 @@ class DataCleaner:
             None
 
         """
-        self._logger.info('Saving questionnaire variables...')
         variables = self.redcap.get_questionnaire_variables()
         variables.save_raw_data(paths=self.paths)
 
         variables = self.clean_variables(variables)
         variables.save_cleaned_data(paths=self.paths, by='form_name', remove_empty_columns=True)
+        self._logger.info(f'Saved cleaned questionnaire variables to {self.paths.get_meta_dir()}.')
 
     def save_questionnaire_reports(self):
         """
@@ -49,12 +49,12 @@ class DataCleaner:
         Returns:
             None
         """
-        self._logger.info('Saving questionnaire reports...')
         reports = self.redcap.get_questionnaire_report()
         reports.save_raw_data(paths=self.paths)
 
         reports = self.clean_reports(reports)
         reports.save_cleaned_data(self.paths, by=['study_id', 'redcap_event_name'], remove_empty_columns=True)
+        self._logger.info(f'Saved cleaned questionnaire reports to {self.paths.get_reports_dir()}.')
 
     def clean_variables(self, variables):
         """

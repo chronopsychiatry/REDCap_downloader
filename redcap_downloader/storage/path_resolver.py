@@ -32,7 +32,7 @@ class PathResolver:
         if not isdir(path):
             raise ValueError(f'Main storage: {path} is not a directory')
         self._main_dir = path
-        self._logger.info(f'Using storage dir: {abspath(self._main_dir)}')
+        self._logger.info(f'Downloading data to: {abspath(self._main_dir)}')
 
     def get_main_dir(self):
         return self._main_dir
