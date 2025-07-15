@@ -7,6 +7,18 @@ from redcap_downloader.redcap_api.dom import Variables, Report
 
 
 class REDCap:
+    """
+    Represents a connection to a REDCap project.
+
+    Attributes:
+        token (str): API token for the REDCap project.
+        base_url (str): Base URL for the REDCap API.
+        report_id (int): ID of the report to fetch.
+
+    Methods:
+        get_questionnaire_variables(): Fetches the list of questionnaire variables from the REDCap API.
+        get_questionnaire_report(): Fetches the questionnaire answers from the REDCap API.
+    """
     def __init__(self, properties):
         self._logger = logging.getLogger('REDCap')
         self.token = properties.redcap_token
@@ -15,6 +27,15 @@ class REDCap:
         self.properties = properties
 
     def get_questionnaire_variables(self):
+        """
+        Fetch the list of questionnaire variables from the REDCap API.
+
+        Args:
+            None
+
+        Returns:
+            Variables: Variables instance containing the raw data.
+        """
         data = {
             'token': self.token,
             'content': 'metadata',
@@ -40,6 +61,15 @@ class REDCap:
         return Variables(pd.read_csv(StringIO(r.text)))
 
     def get_questionnaire_report(self):
+        """
+        Fetch the questionnaire answers from the REDCap API.
+
+        Args:
+            None
+        
+        Returns:
+            Report: Report instance containing the raw data.
+        """
         data = {
             'token': self.token,
             'content': 'report',
@@ -56,5 +86,5 @@ class REDCap:
         if r.status_code != 200:
             self._logger.error(f"Failed to fetch report: {r.text}")
             raise Exception(f"HTTP Error: {r.status_code}")
-        self._logger.info('Accessing report through the REDCap API.')
+        self._logger.info(f'Accessing report {self.report_id} through the REDCap API.')
         return Report(pd.read_csv(StringIO(r.text)))

@@ -3,6 +3,17 @@ import os
 
 
 class DataMixin:
+    """
+    Mixin class providing data handling methods for REDCap data objects.
+
+    Attributes:
+        raw_data (pd.DataFrame): The raw data.
+        cleaned_data (pd.DataFrame): The cleaned data.
+
+    Methods:
+        save_raw_data(path): Saves the raw data to a specified path.
+        split(by): Splits the DataFrame into a list of DataFrames based on the specified columns.
+    """
     def __init__(self):
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -13,6 +24,9 @@ class DataMixin:
         Args:
             data (pd.DataFrame): DataFrame containing the raw data.
             path (str): Path where the raw data will be saved.
+
+        Returns:
+            None
         """
         self.raw_data.to_csv(path, index=False)
         self._logger.info(f'Saved raw data to {path}')
@@ -33,6 +47,17 @@ class DataMixin:
 
 
 class Report(DataMixin):
+    """
+    Represents a report containing questionnaire answers, exported from REDCap.
+
+    Attributes:
+        raw_data (pd.DataFrame): The raw report data.
+        cleaned_data (pd.DataFrame): The cleaned report data.
+        list (list): List of DataFrames split by participant and event.
+
+    Methods:
+        save_cleaned_data(paths): Saves cleaned report data to disk.
+    """
     def __init__(self, report_data):
         super().__init__()
         self.raw_data = report_data
@@ -48,6 +73,9 @@ class Report(DataMixin):
 
         Args:
             paths (PathResolver): PathResolver instance to get the save paths.
+
+        Returns:
+            None
         """
         if self.list is None:
             self._logger.warning('No cleaned report data to save.')
@@ -60,6 +88,17 @@ class Report(DataMixin):
 
 
 class Variables(DataMixin):
+    """
+    Represents a set of variables from the questionnaires of a REDCap project.
+
+    Attributes:
+        raw_data (pd.DataFrame): The raw variables data.
+        cleaned_data (pd.DataFrame): The cleaned variables data.
+        list (list): List of DataFrames split by form name.
+
+    Methods:
+        save_cleaned_data(paths): Saves cleaned variables data to disk.
+    """
     def __init__(self, variables_data):
         super().__init__()
         self.raw_data = variables_data
@@ -75,11 +114,14 @@ class Variables(DataMixin):
 
         Args:
             paths (PathResolver): PathResolver instance to get the save paths.
+
+        Returns:
+            None
         """
         if self.list is None:
             self._logger.warning('No cleaned variables data to save.')
         for df in self.list:
-            self._logger.debug(f'Saving variables with shape: {df.shape}')
+            self._logger.debug(f'Saving {len(df)} variables for form: {df.form_name.iloc[0]}')
             file_path = os.path.join(paths.get_meta_dir(), f"{df.form_name.iloc[0]}.csv")
             df.to_csv(file_path, index=False)
             self._logger.debug(f'Saved cleaned variables data to {file_path}')

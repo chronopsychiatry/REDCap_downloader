@@ -5,12 +5,33 @@ from redcap_downloader.storage.path_resolver import PathResolver
 
 
 class DataCleaner:
+    """
+    Handles the cleaning and saving of questionnaire data from REDCap.
+
+    Attributes:
+        redcap (REDCap): Instance of the REDCap API client.
+        paths (PathResolver): Instance of PathResolver to manage file paths.
+
+    Methods:
+        save_questionnaire_variables(): Cleans and saves questionnaire variables.
+        save_questionnaire_reports(): Cleans and saves questionnaire reports.
+    """
     def __init__(self, redcap: REDCap, paths: PathResolver):
         self._logger = logging.getLogger('DataCleaner')
         self.redcap = redcap
         self.paths = paths
 
     def save_questionnaire_variables(self):
+        """
+        Clean-up and save questionnaire variables from REDCap.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        """
         self._logger.info('Saving questionnaire variables...')
         variables = self.redcap.get_questionnaire_variables()
         variables.save_raw_data(path=self.paths.get_raw_variables_file())
@@ -23,6 +44,15 @@ class DataCleaner:
         variables.save_cleaned_data(paths=self.paths)
 
     def save_questionnaire_reports(self):
+        """
+        Clean-up and save questionnaire reports from REDCap.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self._logger.info('Saving questionnaire reports...')
         reports = self.redcap.get_questionnaire_report()
         reports.save_raw_data(path=self.paths.get_raw_report_file())
@@ -35,6 +65,15 @@ class DataCleaner:
         reports.save_cleaned_data(self.paths)
 
     def clean_variables(self, variables):
+        """
+        Clean-up the variables DataFrame.
+
+        Args:
+            variables (Variables): Variables instance containing raw data.
+
+        Returns:
+            Variables: Variables instance with cleaned data added.
+        """
         cleaned_var = (variables
                        .raw_data
                        .pipe(self.remove_html_tags)
@@ -45,6 +84,15 @@ class DataCleaner:
         return variables
 
     def clean_reports(self, reports):
+        """
+        Clean-up the reports DataFrame.
+
+        Args:
+            reports (Report): Report instance containing raw data.
+
+        Returns:
+            Report: Report instance with cleaned data added.
+        """
         cleaned_reports = (reports
                            .raw_data
                            .assign(redcap_event_name=lambda df:
@@ -54,6 +102,15 @@ class DataCleaner:
         return reports
 
     def clean_variables_form_names(self, df):
+        """
+        Replace form names by human-readable names and merge researcher and participant forms.
+
+        Args:
+            df (pd.DataFrame): DataFrame containing variable data.
+
+        Returns:
+            pd.DataFrame: DataFrame with cleaned form names.
+        """
         return df.assign(
             form_name=lambda x: (
                 x.form_name
@@ -99,5 +156,13 @@ class DataCleaner:
         )
 
     def remove_empty_columns(self, df):
-        """Remove columns that contain only NA values."""
+        """
+        Remove columns that contain only NA values.
+
+        Args:
+            df (pd.DataFrame): DataFrame to be processed.
+
+        Returns:
+            pd.DataFrame: DataFrame with empty columns removed.
+        """
         return df.dropna(axis='columns', how='all')

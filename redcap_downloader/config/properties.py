@@ -3,6 +3,15 @@ import os
 
 
 class Properties():
+    """
+    Represents the properties of the REDCap downloader application, read from a configuration file.
+
+    Attributes:
+        redcap_token_file (str): Path to the file containing the REDCap API token.
+        download_folder (str): Directory where downloaded data will be stored.
+        report_id (int): ID of the report to fetch from REDCap.
+        log_level (str): Logging level for the application.
+    """
     def __init__(self,
                  redcap_token_file=None,
                  download_folder='../downloaded_data',
@@ -24,6 +33,18 @@ class Properties():
 
 
 def load_application_properties(file_path='./REDCap_downloader.properties'):
+    """
+    Load application properties from a configuration file.
+
+    Args:
+        file_path (str): Path to the properties file.
+
+    Returns:
+        Properties: An instance of the Properties class containing the loaded properties.
+
+    Raises:
+        ValueError: If the properties file does not exist or is not readable.
+    """
     config = configparser.ConfigParser()
     if os.path.exists(file_path):
         config.read(file_path)
