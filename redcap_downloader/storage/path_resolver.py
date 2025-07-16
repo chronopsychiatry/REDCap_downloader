@@ -1,7 +1,8 @@
 from os.path import join, exists, isdir, abspath
-from os import makedirs
+from os import makedirs, listdir
 from datetime import datetime
 import logging
+import sys
 
 
 class PathResolver:
@@ -33,6 +34,13 @@ class PathResolver:
             makedirs(path)
         if not isdir(path):
             raise ValueError(f'Main storage: {path} is not a directory')
+        if not len(listdir(path)) == 0:
+            self._logger.warning(f'Main storage: {path} is not empty.')
+            response = input('Continue? (y/n): ').strip().lower()
+            if response != 'y':
+                self._logger.info('Main storage path is not empty and user chose not to continue. '
+                                  'Exiting without downloading data.')
+                sys.exit(1)
         self._main_dir = path
         self._logger.info(f'Downloading data to: {abspath(self._main_dir)}')
 
