@@ -70,7 +70,7 @@ class TestPathsResolver():
         expected_path = os.path.join(self.test_dir,
                                      'reports',
                                      subject_id,
-                                     f'{subject_id}_{event_name}_{self.resolver.timestamp}.csv')
+                                     f'{subject_id}_PROM-{event_name}_{self.resolver.timestamp}.csv')
         assert self.resolver.get_subject_questionnaire(subject_id, event_name) == expected_path
         assert not os.path.exists(expected_path)
 

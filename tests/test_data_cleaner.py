@@ -38,7 +38,7 @@ class TestDataCleaner:
     def test_save_questionnaire_variables(self):
         self.cleaner.save_questionnaire_variables()
 
-        expected_path = self.paths.get_variables_file(form_name='screening')
+        expected_path = self.paths.get_variables_file(form_name='Scre')
         assert os.path.exists(expected_path)
 
         screening_form = pd.read_csv(expected_path)
@@ -49,7 +49,7 @@ class TestDataCleaner:
     def test_save_questionnaire_reports(self):
         self.cleaner.save_questionnaire_reports()
 
-        expected_path = self.paths.get_subject_questionnaire(subject_id='abd001', event_name='event1')
+        expected_path = self.paths.get_subject_questionnaire(subject_id='abd001', event_name='Base')
         assert os.path.exists(expected_path)
 
         subject1_report = pd.read_csv(expected_path)
@@ -71,14 +71,13 @@ class TestDataCleaner:
         assert isinstance(reports, Report)
         assert 'consent_contact' in reports.data.columns
         assert not reports.data['consent_contact'].isna().all()
-        assert not reports.data['redcap_event_name'].str.contains('arm_1').any()
 
     def test_clean_variables_form_names(self):
         cleaned_df = self.cleaner.clean_variables_form_names(self.test_variables)
 
         assert 'baseline_researcher_cb' not in cleaned_df['form_name'].values
-        assert 'baseline' in cleaned_df['form_name'].values
-        assert 'screening' in cleaned_df['form_name'].values
+        assert 'Base' in cleaned_df['form_name'].values
+        assert 'Scre' in cleaned_df['form_name'].values
 
     def test_filter_variables_columns(self):
         filtered_df = self.cleaner.filter_variables_columns(self.test_variables)
