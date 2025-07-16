@@ -88,9 +88,16 @@ class DataCleaner:
         """
         cleaned_reports = (reports
                            .data
-                           .assign(redcap_event_name=lambda df:
-                                   df.redcap_event_name.str.replace('_arm_1', ''))
-                           .query('redcap_event_name != "initial_contact"')
+                           .assign(redcap_event_name=lambda x:
+                                   x.redcap_event_name
+                                   .replace('initial_contact_arm_1', 'Init')
+                                   .replace('baseline_arm_1', 'Base')
+                                   .replace('screening_arm_1', 'Scre')
+                                   .replace('6month_followup_arm_1', 'FU06')
+                                   .replace('12month_followup_arm_1', 'FU12')
+                                   .replace('18month_followup_arm_1', 'FU18')
+                                   )
+                           .query('redcap_event_name != "Init"')
                            )
         reports.data = cleaned_reports
         return reports
@@ -109,15 +116,16 @@ class DataCleaner:
             form_name=lambda x: (
                 x.form_name
                 .replace('participant_information', 'initial_contact')
-                .replace('baseline_researcher_cb', 'baseline')
-                .replace('baseline_participant_questionnaire', 'baseline')
-                .replace('postbaseline_researcher_admin', 'baseline')
-                .replace('m_followup_researcher_questionnaire', '6month_followup')
-                .replace('m_followup_participant_questionnaire', '6month_followup')
-                .replace('m_followup_researcher_questionnaire_e70e', '12month_followup')
-                .replace('m_followup_participant_questionnaire_6517', '12month_followup')
-                .replace('m_followup_researcher_questionnaire_df3a', '18month_followup')
-                .replace('m_followup_participant_questionnaire_13e1', '18month_followup')
+                .replace('baseline_researcher_cb', 'Base')
+                .replace('baseline_participant_questionnaire', 'Base')
+                .replace('postbaseline_researcher_admin', 'Base')
+                .replace('screening', 'Scre')
+                .replace('m_followup_researcher_questionnaire', 'FU06')
+                .replace('m_followup_participant_questionnaire', 'FU06')
+                .replace('m_followup_researcher_questionnaire_e70e', 'FU12')
+                .replace('m_followup_participant_questionnaire_6517', 'FU12')
+                .replace('m_followup_researcher_questionnaire_df3a', 'FU18')
+                .replace('m_followup_participant_questionnaire_13e1', 'FU18')
             )
         )
 

@@ -21,6 +21,7 @@ class PathResolver:
         get_subject_dir(subject_id): Returns the path for a specific subject's data.
         get_raw_variables_file(): Returns the path for raw variables data.
         get_raw_report_file(): Returns the path for raw report data.
+        get_variables_file(form_name): Returns the path for a specific form's variables data.
         get_subject_questionnaire(subject_id, event_name): Returns the path for a subject's questionnaire data.
     """
     def __init__(self, path=join('..', 'downloaded_data')):
@@ -81,4 +82,4 @@ class PathResolver:
         return join(self.get_meta_dir(), f'{form_name}_variables_{self.timestamp}.csv')
 
     def get_subject_questionnaire(self, subject_id, event_name):
-        return join(self.get_subject_dir(subject_id), f'{subject_id}_{event_name}_{self.timestamp}.csv')
+        return join(self.get_subject_dir(subject_id), f'{subject_id}_PROM-{event_name}_{self.timestamp}.csv')
