@@ -1,5 +1,6 @@
 from os.path import join, exists, isdir, abspath
 from os import makedirs
+from datetime import datetime
 import logging
 
 
@@ -23,6 +24,7 @@ class PathResolver:
     """
     def __init__(self, path=join('..', 'downloaded_data')):
         self._logger = logging.getLogger('PathsResolver')
+        self.timestamp = datetime.now().strftime('%Y%m%d')
         self._main_dir = None
         self.set_main_dir(path)
 
@@ -62,10 +64,13 @@ class PathResolver:
         return subject_dir
 
     def get_raw_variables_file(self):
-        return join(self.get_raw_dir(), 'Variables_raw.csv')
+        return join(self.get_raw_dir(), f'Variables_raw_{self.timestamp}.csv')
 
     def get_raw_report_file(self):
-        return join(self.get_raw_dir(), 'Report_raw.csv')
+        return join(self.get_raw_dir(), f'Report_raw_{self.timestamp}.csv')
+
+    def get_variables_file(self, form_name):
+        return join(self.get_meta_dir(), f'{form_name}_variables_{self.timestamp}.csv')
 
     def get_subject_questionnaire(self, subject_id, event_name):
-        return join(self.get_subject_dir(subject_id), f'{subject_id}_{event_name}.csv')
+        return join(self.get_subject_dir(subject_id), f'{subject_id}_{event_name}_{self.timestamp}.csv')

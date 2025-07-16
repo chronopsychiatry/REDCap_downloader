@@ -64,8 +64,7 @@ class TestVariables:
             'empty_column': [None, None]
         })
         variables.save_cleaned_data(self.paths)
-        assert os.path.exists(os.path.join(self.paths.get_meta_dir(),
-                                           "screening.csv"))
+        assert os.path.exists(self.paths.get_variables_file(form_name='screening'))
 
     def test_save_raw_data(self):
         variables = Variables(self.test_variables)

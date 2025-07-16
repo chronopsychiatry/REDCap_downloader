@@ -1,6 +1,7 @@
 import logging
 import os
 import pkg_resources
+from datetime import datetime
 
 from redcap_downloader.config.properties import load_application_properties
 from redcap_downloader.storage.path_resolver import PathResolver
@@ -13,7 +14,7 @@ def main():
     properties = load_application_properties()
 
     # Configure the logger
-    log_file = os.path.join(properties.download_folder, "download.log")
+    log_file = os.path.join(properties.download_folder, f"download_{datetime.now().strftime('%Y%m%d')}.log")
     if not os.path.exists(properties.download_folder):
         os.makedirs(properties.download_folder)
     if os.path.exists(log_file):

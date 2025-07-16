@@ -30,29 +30,31 @@ redcap_download
 The program will create the following folder structure:
 
 ```markdown
-├── download.log
+├── download_20250716.log
 ├── meta
-│   ├── 12month_followup.csv
-│   ├── 18month_followup.csv
-│   ├── 6month_followup.csv
-│   ├── baseline.csv
-│   ├── initial_contact.csv
-│   └── screening.csv
+│   ├── 12month_followup_variables_20250716.csv
+│   ├── 18month_followup_variables_20250716.csv
+│   ├── 6month_followup_variables_20250716.csv
+│   ├── baseline_variables_20250716.csv
+│   ├── initial_contact_variables_20250716.csv
+│   └── screening_variables_20250716.csv
 ├── raw
-│   ├── Report_raw.csv
-│   └── Variables_raw.csv
+│   ├── Report_raw_20250716.csv
+│   └── Variables_raw_20250716.csv
 └── reports
     ├── ABD001
-    │   ├── ABD001_baseline.csv
-    │   ├── ABD001_initial_contact.csv
-    │   └── ABD001_screening.csv
+    │   ├── ABD001_baseline_20250716.csv
+    │   ├── ABD001_initial_contact_20250716.csv
+    │   └── ABD001_screening_20250716.csv
     ├── ABD002
-    │   ├── ABD002_baseline.csv
-    │   ├── ABD002_initial_contact.csv
-    │   └── ABD002_screening.csv
+    │   ├── ABD002_baseline_20250716.csv
+    │   ├── ABD002_initial_contact_20250716.csv
+    │   └── ABD002_screening_20250716.csv
     ├── ABD003
     ...
 ```
+
+All file names contain the date at which the downloader was run (20250716 in this case).
 
 - `download.log`: contains a log of the program run
 - `meta`: questionnaire metadata. Contains one .csv file per questionnaire. Each .csv file contains a list of all variables in the questionnaire (as found in the reports), along with a description

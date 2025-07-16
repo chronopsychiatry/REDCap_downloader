@@ -52,17 +52,25 @@ class TestPathsResolver():
         assert os.path.exists(expected_path)
 
     def test_get_raw_variables_file(self):
-        expected_path = os.path.join(self.test_dir, 'raw', 'Variables_raw.csv')
+        expected_path = os.path.join(self.test_dir, 'raw', f'Variables_raw_{self.resolver.timestamp}.csv')
         assert self.resolver.get_raw_variables_file() == expected_path
 
     def test_get_raw_report_file(self):
-        expected_path = os.path.join(self.test_dir, 'raw', 'Report_raw.csv')
+        expected_path = os.path.join(self.test_dir, 'raw', f'Report_raw_{self.resolver.timestamp}.csv')
         assert self.resolver.get_raw_report_file() == expected_path
+
+    def test_get_variables_file(self):
+        form_name = 'test_form'
+        expected_path = os.path.join(self.test_dir, 'meta', f'{form_name}_variables_{self.resolver.timestamp}.csv')
+        assert self.resolver.get_variables_file(form_name) == expected_path
 
     def test_get_subject_questionnaire(self):
         subject_id = 'subject_123'
         event_name = 'event_456'
-        expected_path = os.path.join(self.test_dir, 'reports', subject_id, f'{subject_id}_{event_name}.csv')
+        expected_path = os.path.join(self.test_dir,
+                                     'reports',
+                                     subject_id,
+                                     f'{subject_id}_{event_name}_{self.resolver.timestamp}.csv')
         assert self.resolver.get_subject_questionnaire(subject_id, event_name) == expected_path
         assert not os.path.exists(expected_path)
 

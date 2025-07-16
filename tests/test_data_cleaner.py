@@ -38,10 +38,10 @@ class TestDataCleaner:
     def test_save_questionnaire_variables(self):
         self.cleaner.save_questionnaire_variables()
 
-        expected_path = self.paths.get_meta_dir()
+        expected_path = self.paths.get_variables_file(form_name='screening')
         assert os.path.exists(expected_path)
 
-        screening_form = pd.read_csv(os.path.join(expected_path, 'screening.csv'))
+        screening_form = pd.read_csv(expected_path)
         assert not screening_form.empty
         assert 'empty_column' not in screening_form.columns
         assert 'non-selected_column' not in screening_form.columns
@@ -49,10 +49,10 @@ class TestDataCleaner:
     def test_save_questionnaire_reports(self):
         self.cleaner.save_questionnaire_reports()
 
-        expected_path = self.paths.get_reports_dir()
+        expected_path = self.paths.get_subject_questionnaire(subject_id='abd001', event_name='event1')
         assert os.path.exists(expected_path)
 
-        subject1_report = pd.read_csv(os.path.join(expected_path, 'abd001', 'abd001_event1.csv'))
+        subject1_report = pd.read_csv(expected_path)
         assert not subject1_report.empty
         assert 'empty_column' not in subject1_report.columns
         assert 'consent_contact' in subject1_report.columns

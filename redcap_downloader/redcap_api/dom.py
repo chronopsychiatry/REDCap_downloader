@@ -1,5 +1,4 @@
 import logging
-import os
 
 from redcap_downloader.data_cleaning.helpers import drop_empty_columns
 
@@ -129,9 +128,9 @@ class Variables(DataMixin):
 
         for df in df_list:
             self._logger.debug(f'Saving {len(df)} variables for form: {df.form_name.iloc[0]}')
-            file_path = os.path.join(paths.get_meta_dir(), f"{df.form_name.iloc[0]}.csv")
-            df.to_csv(file_path, index=False)
-            self._logger.debug(f'Saved cleaned variables data to {file_path}')
+            df.to_csv(paths.get_variables_file(form_name=df.form_name.iloc[0]), index=False)
+            self._logger.debug(f'Saved cleaned variables data to \
+                               {paths.get_variables_file(form_name=df.form_name.iloc[0])}')
 
     def save_raw_data(self, paths):
         """
