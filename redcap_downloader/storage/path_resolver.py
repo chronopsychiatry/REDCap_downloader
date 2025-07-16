@@ -34,7 +34,7 @@ class PathResolver:
             makedirs(path)
         if not isdir(path):
             raise ValueError(f'Main storage: {path} is not a directory')
-        if not len(listdir(path)) == 0:
+        if len(listdir(path)) > 1:
             self._logger.warning(f'Main storage: {path} is not empty.')
             response = input('Continue? (y/n): ').strip().lower()
             if response != 'y':

@@ -36,7 +36,6 @@ The program will create the following folder structure:
 │   ├── 18month_followup_variables_20250716.csv
 │   ├── 6month_followup_variables_20250716.csv
 │   ├── baseline_variables_20250716.csv
-│   ├── initial_contact_variables_20250716.csv
 │   └── screening_variables_20250716.csv
 ├── raw
 │   ├── Report_raw_20250716.csv
@@ -44,11 +43,9 @@ The program will create the following folder structure:
 └── reports
     ├── ABD001
     │   ├── ABD001_baseline_20250716.csv
-    │   ├── ABD001_initial_contact_20250716.csv
     │   └── ABD001_screening_20250716.csv
     ├── ABD002
     │   ├── ABD002_baseline_20250716.csv
-    │   ├── ABD002_initial_contact_20250716.csv
     │   └── ABD002_screening_20250716.csv
     ├── ABD003
     ...
@@ -73,3 +70,5 @@ The Ambient-BD study uses 6 different questionnaires:
 - 6-month followup
 - 12-month followup
 - 18-month followup
+
+The "Initial contact" questionnaire is saved as part of the raw data, but contains very little information (since most fields are direct identifiers that are removed during the REDCap export process). It is therefore not saved as part of the cleaned data (`meta` and `reports` folders).

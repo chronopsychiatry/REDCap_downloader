@@ -68,6 +68,7 @@ class DataCleaner:
         """
         cleaned_var = (variables
                        .data
+                       .query('form_name != "participant_information"')
                        .pipe(self.remove_html_tags)
                        .pipe(self.filter_variables_columns)
                        .pipe(self.clean_variables_form_names)
@@ -89,6 +90,7 @@ class DataCleaner:
                            .data
                            .assign(redcap_event_name=lambda df:
                                    df.redcap_event_name.str.replace('_arm_1', ''))
+                           .query('redcap_event_name != "initial_contact"')
                            )
         reports.data = cleaned_reports
         return reports
