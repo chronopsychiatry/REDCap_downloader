@@ -15,10 +15,9 @@ class TestPathsResolver():
         assert self.resolver._main_dir == self.test_dir
 
     def test_set_main_dir_creates_directory(self):
-        resolver = PathResolver()
-        resolver.set_main_dir(self.temp_dir.name)
+        self.resolver.set_main_dir(self.test_dir)
         assert os.path.exists(self.test_dir)
-        assert resolver.get_main_dir() == self.test_dir
+        assert self.resolver.get_main_dir() == self.test_dir
 
     def test_set_main_dir_raises_exception(self):
         path = os.path.join(self.test_dir, 'file.txt')
