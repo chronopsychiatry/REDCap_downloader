@@ -21,12 +21,13 @@ class TestReport:
     def test_save_cleaned_data(self):
         report = Report(self.test_report)
         report.data = pd.DataFrame({
-            'study_id': ['1', '2', '3'],
+            'participant_id': ['1', '2', '3'],
             'redcap_event_name': ['event1', 'event2', 'event3'],
-            'consent_contact': ['1', '1', '1']
+            'consent_contact': ['1', '1', '1'],
+            'output_form': ['form1', 'form2', 'form2'],
         })
-        report.save_cleaned_data(self.paths, by=['study_id', 'redcap_event_name'])
-        assert os.path.exists(self.paths.get_subject_questionnaire(subject_id='1', event_name='event1'))
+        report.save_cleaned_data(self.paths, by=['participant_id', 'redcap_event_name'])
+        assert os.path.exists(self.paths.get_subject_questionnaire(subject_id='1', event_name='form1'))
 
     def test_save_raw_data(self):
         report = Report(self.test_report)
@@ -61,10 +62,11 @@ class TestVariables:
         variables.data = pd.DataFrame({
             'form_name': ['screening', 'baseline'],
             'field_name': ['field1', 'field2'],
-            'empty_column': [None, None]
+            'empty_column': [None, None],
+            'output_form': ['form1', 'form2']
         })
         variables.save_cleaned_data(self.paths)
-        assert os.path.exists(self.paths.get_variables_file(form_name='screening'))
+        assert os.path.exists(self.paths.get_variables_file(form_name='form1'))
 
     def test_save_raw_data(self):
         variables = Variables(self.test_variables)

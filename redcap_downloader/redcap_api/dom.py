@@ -70,9 +70,9 @@ class Report(DataMixin):
 
         for df in df_list:
             self._logger.debug(f'Saving report with shape: {df.shape}')
-            file_path = paths.get_subject_questionnaire(subject_id=df.study_id.iloc[0],
-                                                        event_name=df.redcap_event_name.iloc[0])
-            df.to_csv(file_path, index=False)
+            file_path = paths.get_subject_questionnaire(subject_id=df.participant_id.iloc[0],
+                                                        event_name=df.output_form.iloc[0])
+            df.drop(columns=['output_form']).to_csv(file_path, index=False)
             self._logger.debug(f'Saved cleaned report data to {file_path}')
 
     def save_raw_data(self, paths):
@@ -127,10 +127,10 @@ class Variables(DataMixin):
             df_list = [drop_empty_columns(df) for df in df_list]
 
         for df in df_list:
-            self._logger.debug(f'Saving {len(df)} variables for form: {df.form_name.iloc[0]}')
-            df.to_csv(paths.get_variables_file(form_name=df.form_name.iloc[0]), index=False)
-            self._logger.debug(f'Saved cleaned variables data to \
-                               {paths.get_variables_file(form_name=df.form_name.iloc[0])}')
+            self._logger.debug(f'Saving {len(df)} variables for form: {df.output_form.iloc[0]}')
+            file_path = paths.get_variables_file(form_name=df.output_form.iloc[0])
+            df.drop(columns=['output_form']).to_csv(file_path, index=False)
+            self._logger.debug(f'Saved cleaned variables data to {file_path}')
 
     def save_raw_data(self, paths):
         """

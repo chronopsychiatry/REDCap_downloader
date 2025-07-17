@@ -49,7 +49,7 @@ class TestDataCleaner:
     def test_save_questionnaire_reports(self):
         self.cleaner.save_questionnaire_reports()
 
-        expected_path = self.paths.get_subject_questionnaire(subject_id='abd001', event_name='Base')
+        expected_path = self.paths.get_subject_questionnaire(subject_id='abd001', event_name='Ques')
         assert os.path.exists(expected_path)
 
         subject1_report = pd.read_csv(expected_path)
@@ -76,8 +76,17 @@ class TestDataCleaner:
         cleaned_df = self.cleaner.clean_variables_form_names(self.test_variables)
 
         assert 'baseline_researcher_cb' not in cleaned_df['form_name'].values
-        assert 'Base' in cleaned_df['form_name'].values
-        assert 'Scre' in cleaned_df['form_name'].values
+        assert 'Baseline' in cleaned_df['form_name'].values
+        assert 'Screening' in cleaned_df['form_name'].values
+        assert len(cleaned_df.columns) == len(cleaned_df.columns.unique())
+
+    def test_clean_reports_form_names(self):
+        cleaned_df = self.cleaner.clean_reports_form_names(self.test_report)
+
+        assert 'baseline_researcher_cb' not in cleaned_df['redcap_event_name'].values
+        assert 'baseline' in cleaned_df['redcap_event_name'].values
+        assert 'screening' in cleaned_df['redcap_event_name'].values
+        assert len(cleaned_df.columns) == len(cleaned_df.columns.unique())
 
     def test_filter_variables_columns(self):
         filtered_df = self.cleaner.filter_variables_columns(self.test_variables)
