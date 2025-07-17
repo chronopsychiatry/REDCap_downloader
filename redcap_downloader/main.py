@@ -3,10 +3,10 @@ import os
 import pkg_resources
 from datetime import datetime
 
-from redcap_downloader.config.properties import load_application_properties
-from redcap_downloader.storage.path_resolver import PathResolver
-from redcap_downloader.redcap_api.redcap import REDCap
-from redcap_downloader.data_cleaning.data_cleaner import DataCleaner
+from config.properties import load_application_properties
+from storage.path_resolver import PathResolver
+from redcap_api.redcap import REDCap
+from data_cleaning.data_cleaner import DataCleaner
 
 
 def main():

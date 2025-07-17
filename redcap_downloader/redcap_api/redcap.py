@@ -3,7 +3,7 @@ import pandas as pd
 from io import StringIO
 import logging
 
-from redcap_downloader.redcap_api.dom import Variables, Report
+from .dom import Variables, Report
 
 
 class REDCap:
@@ -66,7 +66,7 @@ class REDCap:
 
         Args:
             None
-        
+
         Returns:
             Report: Report instance containing the raw data.
         """

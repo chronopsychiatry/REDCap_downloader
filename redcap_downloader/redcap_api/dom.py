@@ -1,6 +1,6 @@
 import logging
 
-from redcap_downloader.data_cleaning.helpers import drop_empty_columns
+from ..data_cleaning.helpers import drop_empty_columns
 
 
 class DataMixin:
