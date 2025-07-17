@@ -32,21 +32,18 @@ The program will create the following folder structure:
 ```markdown
 ├── download_20250716.log
 ├── meta
-│   ├── 12month_followup_variables_20250716.csv
-│   ├── 18month_followup_variables_20250716.csv
-│   ├── 6month_followup_variables_20250716.csv
-│   ├── baseline_variables_20250716.csv
-│   └── screening_variables_20250716.csv
+│   ├── Ques_variables_20250716.csv
+│   └── Scre_variables_20250716.csv
 ├── raw
 │   ├── Report_raw_20250716.csv
 │   └── Variables_raw_20250716.csv
 └── reports
     ├── ABD001
-    │   ├── ABD001_baseline_20250716.csv
-    │   └── ABD001_screening_20250716.csv
+    │   ├── ABD001_PROM-Ques_20250716.csv
+    │   └── ABD001_PROM-Scre_20250716.csv
     ├── ABD002
-    │   ├── ABD002_baseline_20250716.csv
-    │   └── ABD002_screening_20250716.csv
+    │   ├── ABD002_PROM-Ques_20250716.csv
+    │   └── ABD002_PROM-Scre_20250716.csv
     ├── ABD003
     ...
 ```
@@ -58,7 +55,9 @@ All file names contain the date at which the downloader was run (20250716 in thi
 - `raw`: raw data as obtained from REDCap, without any cleaning done. There are two file:
   - `Report_raw.csv`: questionnaire results for all participants, and all questionnaires
   - `Variables_raw.csv`: list of variables for all questionnaires
-- `reports`: cleaned-up questionnaire data, split by participant and questionnaire type (one .csv file for each)
+- `reports`: cleaned-up questionnaire data, split by participant and questionnaire type
+  - `PROM-Scre`: contains only the screening questionnaire
+  - `PROM-Ques`: contains the baseline questionnaire, as well as the 6-, 12- and 18-months follow-up questionnaires
 
 ## Ambient-BD questionnaires
 
