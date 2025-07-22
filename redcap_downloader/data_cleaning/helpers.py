@@ -1,4 +1,7 @@
-def drop_empty_columns(df):
+import pandas as pd
+
+
+def drop_empty_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
     Remove columns that contain only NA values.
 
@@ -11,7 +14,7 @@ def drop_empty_columns(df):
     return df.dropna(axis='columns', how='all')
 
 
-def merge_duplicate_columns(df):
+def merge_duplicate_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
     Merge duplicate columns in a DataFrame by taking the first non-NA value.
 
@@ -29,7 +32,7 @@ def merge_duplicate_columns(df):
             )
 
 
-def replace_strings(series, replacements):
+def replace_strings(series: pd.Series, replacements: dict) -> pd.Series:
     for old, new in replacements.items():
         series = series.str.replace(old, new, regex=False)
     return series

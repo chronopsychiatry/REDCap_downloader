@@ -1,8 +1,9 @@
 from functools import reduce
 import logging
 import numpy as np
+import pandas as pd
 
-from ..redcap_api.redcap import REDCap
+from ..redcap_api.redcap import REDCap, Variables, Report
 from ..storage.path_resolver import PathResolver
 from .helpers import replace_strings, merge_duplicate_columns
 from .replacements import FORM_NAME_REPLACEMENTS, FIELD_NAME_REPLACEMENTS, ARM_NAME_REPLACEMENTS
@@ -60,7 +61,7 @@ class DataCleaner:
         reports.save_cleaned_data(self.paths, by=['participant_id', 'output_form'], remove_empty_columns=True)
         self._logger.info(f'Saved cleaned questionnaire reports to {self.paths.get_reports_dir()}.')
 
-    def clean_variables(self, variables):
+    def clean_variables(self, variables: Variables) -> Variables:
         """
         Clean-up the variables DataFrame.
 
@@ -80,7 +81,7 @@ class DataCleaner:
         variables.data = cleaned_var
         return variables
 
-    def clean_reports(self, reports):
+    def clean_reports(self, reports: Report) -> Report:
         """
         Clean-up the reports DataFrame.
 
@@ -98,7 +99,7 @@ class DataCleaner:
         reports.data = cleaned_reports
         return reports
 
-    def clean_variables_form_names(self, df):
+    def clean_variables_form_names(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Replace form names by human-readable names and merge researcher and participant forms.
 
@@ -117,7 +118,7 @@ class DataCleaner:
                 .pipe(merge_duplicate_columns)
                 )
 
-    def clean_reports_form_names(self, df):
+    def clean_reports_form_names(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Clean-up the form and column names of the reports DataFrame.
 
@@ -137,7 +138,7 @@ class DataCleaner:
                 .pipe(merge_duplicate_columns)
                 )
 
-    def filter_variables_columns(self, df):
+    def filter_variables_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Remove unnecessary columns from the DataFrame.
 
@@ -150,7 +151,7 @@ class DataCleaner:
         keep_cols = ['field_name', 'form_name', 'section_header', 'field_type', 'field_label']
         return df[keep_cols].copy()
 
-    def remove_html_tags(self, df):
+    def remove_html_tags(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Remove HTML tags from all string cells in a DataFrame.
 

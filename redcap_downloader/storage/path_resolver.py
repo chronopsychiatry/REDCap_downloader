@@ -46,41 +46,41 @@ class PathResolver:
         self._main_dir = path
         self._logger.info(f'Downloading data to: {self._main_dir.absolute()}')
 
-    def get_main_dir(self):
+    def get_main_dir(self) -> Path:
         return self._main_dir
 
-    def get_raw_dir(self):
+    def get_raw_dir(self) -> Path:
         raw_dir = self._main_dir / 'raw'
         if not raw_dir.exists():
             raw_dir.mkdir(parents=True)
         return raw_dir
 
-    def get_meta_dir(self):
+    def get_meta_dir(self) -> Path:
         meta_dir = self._main_dir / 'meta'
         if not meta_dir.exists():
             meta_dir.mkdir(parents=True)
         return meta_dir
 
-    def get_reports_dir(self):
+    def get_reports_dir(self) -> Path:
         reports_dir = self._main_dir / 'reports'
         if not reports_dir.exists():
             reports_dir.mkdir(parents=True)
         return reports_dir
 
-    def get_subject_dir(self, subject_id):
+    def get_subject_dir(self, subject_id: str) -> Path:
         subject_dir = self.get_reports_dir() / subject_id
         if not subject_dir.exists():
             subject_dir.mkdir(parents=True)
         return subject_dir
 
-    def get_raw_variables_file(self):
+    def get_raw_variables_file(self) -> Path:
         return self.get_raw_dir() / f'Variables_raw_{self.timestamp}.csv'
 
-    def get_raw_report_file(self):
+    def get_raw_report_file(self) -> Path:
         return self.get_raw_dir() / f'Report_raw_{self.timestamp}.csv'
 
-    def get_variables_file(self, form_name):
+    def get_variables_file(self, form_name: str) -> Path:
         return self.get_meta_dir() / f'{form_name}_variables_{self.timestamp}.csv'
 
-    def get_subject_questionnaire(self, subject_id, event_name):
+    def get_subject_questionnaire(self, subject_id: str, event_name: str) -> Path:
         return self.get_subject_dir(subject_id) / f'{subject_id}_PROM-{event_name}_{self.timestamp}.csv'

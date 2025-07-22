@@ -19,8 +19,8 @@ class Properties():
                  log_level: str = 'INFO'
                  ):
 
-        self.redcap_token_file = Path(redcap_token_file) or Path('./redcap_token.txt')
-        self.download_folder = Path(download_folder) or Path('../downloaded_data')
+        self.redcap_token_file = Path(redcap_token_file or './redcap_token.txt')
+        self.download_folder = Path(download_folder or '../downloaded_data')
         self.report_id = report_id
         self.log_level = log_level
         with self.redcap_token_file.open('r') as f:

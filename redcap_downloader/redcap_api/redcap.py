@@ -4,6 +4,7 @@ from io import StringIO
 import logging
 
 from .dom import Variables, Report
+from ..config.properties import Properties
 
 
 class REDCap:
@@ -19,7 +20,7 @@ class REDCap:
         get_questionnaire_variables(): Fetches the list of questionnaire variables from the REDCap API.
         get_questionnaire_report(): Fetches the questionnaire answers from the REDCap API.
     """
-    def __init__(self, properties):
+    def __init__(self, properties: Properties):
         self._logger = logging.getLogger('REDCap')
         self.token = properties.redcap_token
         self.base_url = 'https://redcap.usher.ed.ac.uk/api/'

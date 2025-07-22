@@ -1,6 +1,8 @@
 import logging
+import pandas as pd
 
 from ..data_cleaning.helpers import drop_empty_columns
+from ..storage.path_resolver import PathResolver
 
 
 class DataMixin:
@@ -17,7 +19,7 @@ class DataMixin:
     def __init__(self):
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    def split(self, by):
+    def split(self, by: list[str]) -> list[pd.DataFrame]:
         """Split the DataFrame into a list of DataFrames based on the specified columns.
 
         Args:
@@ -40,7 +42,7 @@ class Report(DataMixin):
     Methods:
         save_cleaned_data(paths): Saves cleaned report data to disk.
     """
-    def __init__(self, report_data):
+    def __init__(self, report_data: pd.DataFrame):
         super().__init__()
         self.data = report_data
         self.raw_data = report_data
@@ -52,7 +54,7 @@ class Report(DataMixin):
     def __str__(self):
         return f"Report with {self.data.shape[0]} entries and {self.data.shape[1]} columns"
 
-    def save_cleaned_data(self, paths, by=None, remove_empty_columns=True):
+    def save_cleaned_data(self, paths: PathResolver, by: list[str] = None, remove_empty_columns: bool = True):
         """
         Save cleaned questionnaire report data after splitting it by the specified columns.
 
@@ -75,7 +77,7 @@ class Report(DataMixin):
             df.drop(columns=['output_form']).to_csv(file_path, index=False)
             self._logger.debug(f'Saved cleaned report data to {file_path}')
 
-    def save_raw_data(self, paths):
+    def save_raw_data(self, paths: PathResolver):
         """
         Save raw data to a specified path.
 
@@ -101,7 +103,7 @@ class Variables(DataMixin):
     Methods:
         save_cleaned_data(paths): Saves cleaned variables data to disk.
     """
-    def __init__(self, variables_data):
+    def __init__(self, variables_data: pd.DataFrame):
         super().__init__()
         self.raw_data = variables_data
         self.data = variables_data
@@ -110,7 +112,7 @@ class Variables(DataMixin):
     def __str__(self):
         return f"Variables with {self.raw_data.shape[0]} entries"
 
-    def save_cleaned_data(self, paths, by=None, remove_empty_columns=True):
+    def save_cleaned_data(self, paths: PathResolver, by: list[str] = None, remove_empty_columns: bool = True):
         """
         Save cleaned variables data.
 
@@ -132,7 +134,7 @@ class Variables(DataMixin):
             df.drop(columns=['output_form']).to_csv(file_path, index=False)
             self._logger.debug(f'Saved cleaned variables data to {file_path}')
 
-    def save_raw_data(self, paths):
+    def save_raw_data(self, paths: PathResolver):
         """
         Save raw data to a specified path.
 
