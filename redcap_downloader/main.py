@@ -1,5 +1,5 @@
 import logging
-import os
+from pathlib import Path
 import pkg_resources
 from datetime import datetime
 
@@ -14,13 +14,13 @@ def main():
     properties = load_application_properties()
 
     # Configure the logger
-    log_file = os.path.join(properties.download_folder, f"download_{datetime.now().strftime('%Y%m%d')}.log")
-    if not os.path.exists(properties.download_folder):
-        os.makedirs(properties.download_folder)
-    if os.path.exists(log_file):
-        os.remove(log_file)
+    log_file = Path(properties.download_folder) / f"download_{datetime.now().strftime('%Y%m%d')}.log"
+    if not log_file.parent.exists():
+        log_file.parent.mkdir(parents=True)
+    if log_file.exists():
+        log_file.unlink()
     logging.basicConfig(
-        level=logging.DEBUG if properties.log_level == 'DEBUG' else logging.INFO,  # Set the log level
+        level=logging.DEBUG if properties.log_level == 'DEBUG' else logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Log format
         handlers=[
             logging.FileHandler(log_file),  # Log to a file

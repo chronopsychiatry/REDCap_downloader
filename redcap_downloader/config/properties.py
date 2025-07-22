@@ -1,5 +1,5 @@
 import configparser
-import os
+from pathlib import Path
 
 
 class Properties():
@@ -13,17 +13,17 @@ class Properties():
         log_level (str): Logging level for the application.
     """
     def __init__(self,
-                 redcap_token_file=None,
-                 download_folder='../downloaded_data',
-                 report_id=None,
-                 log_level='INFO'
+                 redcap_token_file: str | Path = None,
+                 download_folder: str | Path = '../downloaded_data',
+                 report_id: int | None = None,
+                 log_level: str = 'INFO'
                  ):
 
-        self.redcap_token_file = redcap_token_file or './redcap_token.txt'
-        self.download_folder = download_folder or '../downloaded_data'
+        self.redcap_token_file = Path(redcap_token_file) or Path('./redcap_token.txt')
+        self.download_folder = Path(download_folder) or Path('../downloaded_data')
         self.report_id = report_id
         self.log_level = log_level
-        with open(redcap_token_file, 'r') as f:
+        with self.redcap_token_file.open('r') as f:
             self.redcap_token = f.readline().strip(' \t\n\r')
 
     def __str__(self):
@@ -32,7 +32,7 @@ class Properties():
                f"log_level={self.log_level})"
 
 
-def load_application_properties(file_path='./REDCap_downloader.properties'):
+def load_application_properties(file_path: str | Path = './REDCap_downloader.properties'):
     """
     Load application properties from a configuration file.
 
@@ -45,8 +45,9 @@ def load_application_properties(file_path='./REDCap_downloader.properties'):
     Raises:
         ValueError: If the properties file does not exist or is not readable.
     """
+    file_path = Path(file_path)
     config = configparser.ConfigParser()
-    if os.path.exists(file_path):
+    if file_path.exists():
         config.read(file_path)
     else:
         raise ValueError(f"Properties file not found: {file_path}.")

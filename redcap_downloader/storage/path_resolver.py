@@ -1,5 +1,4 @@
-from os.path import join, exists, isdir, abspath
-from os import makedirs, listdir
+from pathlib import Path
 from datetime import datetime
 import logging
 import sys
@@ -24,62 +23,64 @@ class PathResolver:
         get_variables_file(form_name): Returns the path for a specific form's variables data.
         get_subject_questionnaire(subject_id, event_name): Returns the path for a subject's questionnaire data.
     """
-    def __init__(self, path=join('..', 'downloaded_data')):
+    def __init__(self, path: str | Path = '../downloaded_data'):
+        path = Path(path)
         self._logger = logging.getLogger('PathsResolver')
         self.timestamp = datetime.now().strftime('%Y%m%d')
         self._main_dir = None
         self.set_main_dir(path)
 
-    def set_main_dir(self, path):
-        if not exists(path):
-            makedirs(path)
-        if not isdir(path):
-            raise ValueError(f'Main storage: {path} is not a directory')
-        if len(listdir(path)) > 1:
-            self._logger.warning(f'Main storage: {path} is not empty.')
+    def set_main_dir(self, path: str | Path):
+        path = Path(path)
+        if not path.exists():
+            path.mkdir(parents=True)
+        if not path.is_dir():
+            raise ValueError(f'Main storage: {str(path)} is not a directory')
+        if len(list(path.iterdir())) > 1:
+            self._logger.warning(f'Main storage: {str(path)} is not empty.')
             response = input('Continue? (y/n): ').strip().lower()
             if response != 'y':
                 self._logger.info('Main storage path is not empty and user chose not to continue. '
                                   'Exiting without downloading data.')
                 sys.exit(1)
         self._main_dir = path
-        self._logger.info(f'Downloading data to: {abspath(self._main_dir)}')
+        self._logger.info(f'Downloading data to: {self._main_dir.absolute()}')
 
     def get_main_dir(self):
         return self._main_dir
 
     def get_raw_dir(self):
-        raw_dir = join(self._main_dir, 'raw')
-        if not exists(raw_dir):
-            makedirs(raw_dir)
+        raw_dir = self._main_dir / 'raw'
+        if not raw_dir.exists():
+            raw_dir.mkdir(parents=True)
         return raw_dir
 
     def get_meta_dir(self):
-        meta_dir = join(self._main_dir, 'meta')
-        if not exists(meta_dir):
-            makedirs(meta_dir)
+        meta_dir = self._main_dir / 'meta'
+        if not meta_dir.exists():
+            meta_dir.mkdir(parents=True)
         return meta_dir
 
     def get_reports_dir(self):
-        reports_dir = join(self._main_dir, 'reports')
-        if not exists(reports_dir):
-            makedirs(reports_dir)
+        reports_dir = self._main_dir / 'reports'
+        if not reports_dir.exists():
+            reports_dir.mkdir(parents=True)
         return reports_dir
 
     def get_subject_dir(self, subject_id):
-        subject_dir = join(self.get_reports_dir(), subject_id)
-        if not exists(subject_dir):
-            makedirs(subject_dir)
+        subject_dir = self.get_reports_dir() / subject_id
+        if not subject_dir.exists():
+            subject_dir.mkdir(parents=True)
         return subject_dir
 
     def get_raw_variables_file(self):
-        return join(self.get_raw_dir(), f'Variables_raw_{self.timestamp}.csv')
+        return self.get_raw_dir() / f'Variables_raw_{self.timestamp}.csv'
 
     def get_raw_report_file(self):
-        return join(self.get_raw_dir(), f'Report_raw_{self.timestamp}.csv')
+        return self.get_raw_dir() / f'Report_raw_{self.timestamp}.csv'
 
     def get_variables_file(self, form_name):
-        return join(self.get_meta_dir(), f'{form_name}_variables_{self.timestamp}.csv')
+        return self.get_meta_dir() / f'{form_name}_variables_{self.timestamp}.csv'
 
     def get_subject_questionnaire(self, subject_id, event_name):
-        return join(self.get_subject_dir(subject_id), f'{subject_id}_PROM-{event_name}_{self.timestamp}.csv')
+        return self.get_subject_dir(subject_id) / f'{subject_id}_PROM-{event_name}_{self.timestamp}.csv'
